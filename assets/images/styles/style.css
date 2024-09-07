@@ -1,0 +1,412 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5e4de;
+    color: #333;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    padding: 50px;
+    margin-top: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Ensure text and image are side by side */
+}
+
+header {
+    background-color: #f5e4de; /* Match the overall background */
+    padding: 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+header:hover {
+    background-color: #f56d6d; /* Attractive color on hover */
+    color: #ffffff; /* Change text color on hover */
+}
+
+.logo {
+    font-size: 32px; /* Slightly larger text */
+    font-weight: bold;
+    color: #333;
+    transition: color 0.3s ease;
+}
+
+.logo:hover {
+    color: #ffffff; /* Change logo color on hover */
+}
+
+.nav-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.nav-list li {
+    margin-right: 30px; /* Increased margin for spacing */
+}
+
+.nav-list li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 18px; /* Larger text size */
+    transition: color 0.3s ease;
+}
+
+.nav-list li a:hover {
+    color: #ffffff; /* Change link color on hover */
+}
+
+.chat-btn {
+    background-color: #d4418e;
+    color: white;
+    padding: 15px 25px; /* Larger button */
+    border-radius: 10px; /* More rounded corners */
+    text-decoration: none;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.chat-btn:hover {
+    background-color: #333;
+    color: #ffffff;
+}
+
+/* Hero Section */
+.hero {
+
+    align-items: center;
+    justify-content: space-between;
+    padding: 50px 0;
+}
+
+.hero-text {
+    flex: 1;
+    max-width: 60%;
+}
+
+.hero-text h2 {
+    color: #d4418e;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.hero-text h1 {
+    font-size: 48px;
+    line-height: 1.2;
+    margin-bottom: 30px;
+}
+
+.hero-text .highlight {
+    color: #d4418e;
+}
+
+.hero-text p {
+    margin-bottom: 40px;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.buttons .btn {
+    background-color: #d4418e;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-right: 15px;
+}
+
+.social-icons {
+    margin-top: 20px;
+}
+
+.social-icons a {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.hero-image {
+    flex: 1;
+    position: relative;
+    max-width: 40%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-right: 50px;
+}
+
+.hero-image img {
+    border-radius: 50%;
+    width: 270px; /* Adjust size as needed */
+    height: 270px; /* Adjust size as needed */
+    object-fit: cover;
+    position: relative;
+    z-index: 1;
+}
+
+.circle-text {
+    position: absolute;
+    width: 350px; /* Larger than the image to wrap around */
+    height: 350px; /* Larger than the image to wrap around */
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    color: #d4418e;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    white-space: nowrap;
+    font-size: 16px; /* Adjust font size as needed */
+    transform: rotate(0deg); /* Adjust to rotate from top */
+}
+
+.circle-text span {
+    position: absolute;
+    transform-origin: 0 175px; /* Adjust the radius to fit around the image */
+    transform: rotate(calc(var(--i) * 60deg));
+}
+
+/* Adjustments for each letter */
+.circle-text span:nth-child(1) { --i: 0; }
+.circle-text span:nth-child(2) { --i: 1; }
+.circle-text span:nth-child(3) { --i: 2; }
+.circle-text span:nth-child(4) { --i: 3; }
+.circle-text span:nth-child(5) { --i: 4; }
+.circle-text span:nth-child(6) { --i: 5; }
+
+h1 {
+    color: #d4418e;
+    font-size: 36px;
+    margin-bottom: 20px;
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 30px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+textarea:focus {
+    border-color: #d4418e;
+}
+
+textarea {
+    resize: vertical;
+}
+
+button[type="submit"].btn {
+    background-color: #d4418e;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button[type="submit"].btn:hover {
+    background-color: #333;
+}
+.container2 {
+    width: 60%;
+    margin: 0 auto;
+    padding: 50px;
+}
+
+.card2 {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    padding: 40px;
+    margin-top: 50px;
+}
+/* Projects Section */
+.projects-section {
+    padding: 50px 0;
+}
+
+.section-title {
+    text-align: center;
+    color: #d4418e;
+    font-size: 36px;
+    margin-bottom: 50px;
+}
+
+.projects-grid {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.project-card {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 30%;
+}
+
+.project-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+.project-image img {
+    width: 100%;
+    height: auto;
+    border-bottom: 2px solid #f5e4de;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+.project-description {
+    padding: 20px;
+}
+
+.project-description h3 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #d4418e;
+}
+
+.project-description p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.project-link {
+    text-decoration: none;
+    color: #d4418e;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.project-link:hover {
+    color: #f56d6d;
+}
+.skills-section {
+    margin: 50px 0;
+}
+
+.skills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.skill-card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    text-align: center;
+    width: 200px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skill-card img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 10px;
+}
+
+.skill-card h3 {
+    font-size: 20px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.skill-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+.contact-info, .education {
+    background-color: #ffffff;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.contact-info h2, .education h2 {
+    color: #d4418e;
+}
+
+.contact-info p, .education p {
+    font-size: 16px;
+    color: #333;
+    margin: 10px 0;
+}
+
+.contact-info p strong, .education p strong {
+    font-weight: bold;
+}
+footer {
+    background-color: #dd90ac; /* Dark background color for the footer */
+    color: #ecf0f1; /* Light text color for better contrast */
+    text-align: center;
+    padding: 20px 0;
+}
+
+footer .social-icons {
+    margin-bottom: 10px;
+}
+
+footer .social-icons a {
+    margin: 0 15px; /* Spacing between icons */
+    color: #ecf0f1; /* Light color for icons */
+    font-size: 32px; /* Reduced icon size to fit better */
+    transition: color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+footer .social-icons a:hover {
+    color: #1abc9c; /* Change icon color on hover */
+}
+
+footer p {
+    margin: 0;
+    font-size: 14px; /* Smaller font size for the copyright text */
+}
