@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Authentication</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Correct Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script>
+      // Firebase configuration and initialization
+      const firebaseConfig = {
+    apiKey: "AIzaSyCLm9HIDM1XiI41ytJAwyxn6KKMjZHTSfY",
+    authDomain: "commentapp-abad2.firebaseapp.com",
+    projectId: "commentapp-abad2",
+    storageBucket: "commentapp-abad2.firebasestorage.app",
+    messagingSenderId: "793253137588",
+    appId: "1:793253137588:web:431e4f3957136d6a4adbe1"
+  };
+
+      // Initialize Firebase and Auth
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+    </script>
+  </head>
+  <body>
+    <div id="auth-container">
+      <!-- Registration Form -->
+      <div id="register-section" style="display: none;">
+        <h2>Register</h2>
+        <input type="email" id="registerEmail" placeholder="Email" required>
+        <input type="password" id="registerPassword" placeholder="Password" required>
+        <button onclick="register()">Register</button>
+        <p>Already have an account? <a href="#" onclick="toggleView('login')">Login</a></p>
+      </div>
+
+      <!-- Login Form -->
+      <div id="login-section">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <a href="#" onclick="toggleView('register')">Register</a></p>
+      </div>
+
+      <!-- Comment Section (Only Visible for Authenticated Users) -->
+      <!-- <div id="comment-section" style="display: none;">
+        <h2>Comment</h2>
+        <textarea id="userComment" placeholder="Enter your comment"></textarea>
+        <button onclick="editComment()">Edit Comment</button>
+        <button onclick="logout()">Logout</button>
+      </div>
+    </div> -->
+
+    <script>
+      // Function to toggle between login and register views
+      function toggleView(view) {
+        if (view === 'login') {
+          document.getElementById('login-section').style.display = 'block';
+          document.getElementById('register-section').style.display = 'none';
+        } else if (view === 'register') {
+          document.getElementById('register-section').style.display = 'block';
+          document.getElementById('login-section').style.display = 'none';
+        }
+      }
+
+      // Registration Function
+      function register() {
+        const email = document.getElementById('registerEmail').value;
+        const password = document.getElementById('registerPassword').value;
+
+        auth.createUserWithEmailAndPassword(email, password)
+          .then((userCredential) => {
+            // Send email verification
+            userCredential.user.sendEmailVerification();
+            alert("Verification email sent. Please check your inbox.");
+            toggleView('login'); // Redirect to login after registration
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      }
+
+      // Login Function
+      function login() {
+  const email = document.getElementById('loginEmail').value;
+  const password = document.getElementById('loginPassword').value;
+
+  auth.signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      if (userCredential.user.emailVerified) {
+        alert('Login successful!');
+        window.location.href = "portfolio.html"; // Redirect to portfolio.html
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('register-section').style.display = 'none';
+      } else {
+        alert("Please verify your email before logging in.");
+      }
+    })
+    .catch((error) => {
+      // Custom error message handling
+      const errorCode = error.code;
+
+      // Map Firebase error codes to custom messages
+      const errorMessages = {
+        "auth/wrong-password": "The password you entered is incorrect. Please try again.",
+        "auth/user-not-found": "No account found with this email address. Please register first.",
+        "auth/invalid-email": "The email address is not valid. Please enter a valid email.",
+        "auth/network-request-failed": "Network error. Please check your internet connection and try again."
+      };
+
+      // Show custom message or default message for unknown errors
+      const customMessage = errorMessages[errorCode] || "The password you entered is incorrect. Please try again.";
+      alert(customMessage);
+    });
+}
+
+    //   // Edit Comment Function
+    //   function editComment() {
+    //     const comment = document.getElementById('userComment').value;
+    //     alert("Comment saved: " + comment);
+    //   }
+
+      // Logout Function
+      function logout() {
+        auth.signOut()
+          .then(() => {
+            alert('Logged out');
+            // document.getElementById('comment-section').style.display = 'none';
+            toggleView('login');
+          })
+          .catch((error) => {
+            alert(error.message);
+          });
+      }
+
+      // Listen for auth state changes
+      auth.onAuthStateChanged((user) => {
+        if (user && user.emailVerified) {
+        //   document.getElementById('comment-section').style.display = 'block';
+          document.getElementById('login-section').style.display = 'none';
+          document.getElementById('register-section').style.display = 'none';
+        } else {
+        //   document.getElementById('comment-section').style.display = 'none';
+        }
+      });
+
+      // Initial view setup
+      window.onload = () => {
+        toggleView('login'); // Default to login view
+      };
+    </script>
+  </body>
+</html>

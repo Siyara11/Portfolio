@@ -19,32 +19,38 @@
         <a href="#" class="chat-btn">Let's chat 💬</a>
     </header>
 
-    <div class="container2">
-        <section class="card2">
-            <h1>Contact Me</h1>
-        </br>
-            <p>If you have any questions or would like to get in touch, please fill out the form below. I'll get back to you as soon as possible.</p>
-            <form action="mailto:ashan@gmail.com" method="post" enctype="text/plain">
-                <div class="form-group">
-                    <label for="name">Name:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="subject">Subject:</label>
-                    <input type="text" id="subject" name="subject" required>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message:</label>
-                    <textarea id="message" name="message" rows="5" required></textarea>
-                </div>
-                <button type="submit" class="btn">Send Message</button>
-            </form>
-        </section>
+    <div class="container">
+        <h2>Contact Us</h2>
+        <form id="contactForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            
+            <label for="message">Message:</label>
+            <textarea id="message" required></textarea>
+            
+            <button type="submit">Submit</button>
+        </form>
     </div>
+    
+    <!-- Table to Display Submitted Data -->
+    <div class="container">
+        <h2>Submitted Data</h2>
+        <table id="dataTable" border="1">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Message</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody"></tbody>
+        </table>
+    </div>
+    
     <footer>
         <div class="social-icons">
             <a href="#"><i class="fa fa-github"></i></a>
@@ -53,6 +59,103 @@
         </div>
         <p>&copy; 2024 All Rights Reserved</p>
     </footer>
-    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, updateDoc, deleteDoc, onSnapshot, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+    apiKey: "AIzaSyAhJemP4-H_WYRtRscCeGM3N2qeIOeeoUM",
+    authDomain: "webapplication-a4e0e.firebaseapp.com",
+    projectId: "webapplication-a4e0e",
+    storageBucket: "webapplication-a4e0e.firebasestorage.app",
+    messagingSenderId: "773234027201",
+    appId: "1:773234027201:web:b2872241f43d0ee04e0240",
+    measurementId: "G-1YYT4PKPE0"
+  };
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const contactForm = document.getElementById('contactForm');
+        const tableBody = document.getElementById('tableBody');
+
+        // Collection reference
+        const contactsCollection = collection(db, "contacts");
+
+        // Avoid Multiple Submissions
+        let isUpdating = false; 
+        let currentDocId = null;
+
+        // Add or Update Data
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+
+            try {
+                if (isUpdating && currentDocId) {
+                    const docRef = doc(db, "contacts", currentDocId);
+                    await updateDoc(docRef, { name, email, message });
+                    alert('Data Updated Successfully!');
+                } else {
+                    await addDoc(contactsCollection, { name, email, message });
+                    alert('Data Added Successfully!');
+                }
+                contactForm.reset();
+                resetFormState();
+            } catch (error) {
+                console.error("Error submitting data: ", error);
+            }
+        });
+
+        // Reset Form State after submit
+        function resetFormState() {
+            isUpdating = false;
+            currentDocId = null;
+            contactForm.querySelector('button[type="submit"]').textContent = "Submit";
+        }
+
+        // Display Data in Table
+        onSnapshot(contactsCollection, (snapshot) => {
+            tableBody.innerHTML = '';
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${data.name}</td>
+                        <td>${data.email}</td>
+                        <td>${data.message}</td>
+                        <td>
+                            <button onclick="editData('${doc.id}', '${data.name}', '${data.email}', '${data.message}')">Edit</button>
+                            <button onclick="deleteData('${doc.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        });
+
+        // Edit Data
+        window.editData = (id, name, email, message) => {
+            isUpdating = true;
+            currentDocId = id;
+            document.getElementById('name').value = name;
+            document.getElementById('email').value = email;
+            document.getElementById('message').value = message;
+            contactForm.querySelector('button[type="submit"]').textContent = "Update";
+        };
+
+        // Delete Data
+        window.deleteData = async (id) => {
+            try {
+                await deleteDoc(doc(db, "contacts", id));
+                alert('Data Deleted Successfully!');
+            } catch (error) {
+                console.error("Error deleting document: ", error);
+            }
+        };
+    </script>
 </body>
 </html>

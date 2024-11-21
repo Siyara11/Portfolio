@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Comment System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        li {
+            padding: 10px;
+            background: #f9f9f9;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .edit-btn {
+            margin-right: 5px;
+            background-color: #ffc107;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Real-Time Comment System</h2>
+        <form id="commentForm">
+            <input type="text" id="comment" placeholder="Enter your comment..." required>
+            <button type="submit">Post Comment</button>
+        </form>
+        <h3>Comments</h3>
+        <ul id="commentList"></ul>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, onSnapshot, updateDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+        // Firebase Configuration
+        const firebaseConfig = {
+    apiKey: "AIzaSyCLm9HIDM1XiI41ytJAwyxn6KKMjZHTSfY",
+    authDomain: "commentapp-abad2.firebaseapp.com",
+    projectId: "commentapp-abad2",
+    storageBucket: "commentapp-abad2.firebasestorage.app",
+    messagingSenderId: "793253137588",
+    appId: "1:793253137588:web:431e4f3957136d6a4adbe1"
+  };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const commentsCollection = collection(db, "comments");
+
+        const commentForm = document.getElementById('commentForm');
+        const commentList = document.getElementById('commentList');
+
+        // Add Comment
+        commentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const comment = document.getElementById('comment').value;
+            await addDoc(commentsCollection, { text: comment, timestamp: new Date() });
+            commentForm.reset();
+        });
+
+        // Display Comments in Real-Time
+        onSnapshot(commentsCollection, (snapshot) => {
+            commentList.innerHTML = '';
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                commentList.innerHTML += `
+                    <li>
+                        ${data.text}
+                        <div>
+                            <button class="edit-btn" onclick="editComment('${doc.id}', '${data.text}')">Edit</button>
+                            <button class="delete-btn" onclick="deleteComment('${doc.id}')">Delete</button>
+                        </div>
+                    </li>`;
+            });
+        });
+
+        // Edit Comment
+        window.editComment = async (id, currentText) => {
+            const newText = prompt("Edit your comment:", currentText);
+            if (newText) {
+                const docRef = doc(db, "comments", id);
+                await updateDoc(docRef, { text: newText });
+            }
+        };
+
+        // Delete Comment
+        window.deleteComment = async (id) => {
+            const docRef = doc(db, "comments", id);
+            await deleteDoc(docRef);
+        };
+    </script>
+</body>
+</html>
